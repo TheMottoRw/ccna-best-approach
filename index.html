@@ -1,0 +1,544 @@
+<html>
+<head>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container">
+    <div class="jumbotron"><h3> Welcome to CCNA Revision dialog</h3></div>
+    <form class="form-check-inline" role="form">
+        <div id="response-error" class="alert alert-danger" style="display: none"></div>
+        <div id="response-success" class="alert alert-success" style="display: none"></div>
+        <div class="form-group">
+            <label>Question range</label>
+        <input type="text" class="form-control" id="question_range" placeholder="1-50">
+        </div>
+        <div class="form-group">
+            <label>Question: <span id="question_number"></span></label><br>
+        <img src="images/1.png" id="question_image">
+        </div>
+        <div class="form-group">
+            <label>ANSWER</label>
+            <input type="text" class="form-control" id="answer">
+        </div>
+        <div class="form-group"><br>
+            <button type="button" class="btn btn-sm btn-outline-success" id="btnMatch">Match</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="btnNext">NEXT</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="pull-right">Scores:<span id="scores"></span></span>
+        </div>
+        <div class="form-group"><br><br><br>
+            <button type="button" class="btn btn-sm btn-outline-danger" id="btnReset">Reset</button>
+        </div>
+    </form>
+</div>
+<script src="bootstrap/js/bootstrap.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded",function(){
+        var questionNumber=1,questionStart=1,questionEnd=1,question=1,answer="",answers = {},questionImage = '',scores = 0;
+        var elQuestionImage = document.querySelector("#question_image"),elQuestionNumber = document.querySelector("#question_number"),elScores = document.querySelector("#scores"),elFail = document.querySelector("#response-error"),elSuccess = document.querySelector("#response-success");
+        loadAnswers();
+        document.querySelector("#question_range").addEventListener("blur",function (event){
+            initQuestions(this.value);
+        })
+        document.querySelector("#btnMatch").addEventListener("click",function (event){
+            //check result
+            console.log(answers);
+            console.log(question);
+            let userAnswer = document.querySelector("#answer").value.toUpperCase();
+            console.log(userAnswer);
+            console.log(answers[question]);
+            if(userAnswer!=answers[question].toString().toUpperCase()){
+                showResponse(false,"Wrong answer,RIGHT ANSWER IS "+answers[question.toString()]);
+            }else{
+                scores+=1;
+                showResponse(true,"Right answer");
+            }
+        })
+        document.querySelector("#btnNext").addEventListener("click",function(){
+            console.log(question);
+            if(question+1<=questionEnd){
+                question+=1;
+                elQuestionImage.src=`images/${question}.png`;
+                elQuestionNumber.innerHTML=question;
+                elScores.innerHTML = scores+"/"+(parseInt(question-questionStart)+1);
+                document.querySelector("#answer").value="";
+            }else{
+                showResponse(false,"Reached the end,reset to restart");
+            }
+        })
+        document.querySelector("#btnReset").addEventListener("click",function(){
+            question=1;
+            questionStart=1;
+            questionEnd=1;
+            elQuestionImage.src=`images/${question}.png`;
+            document.querySelector("#question_range").value='';
+            elSuccess.innerHTML='';
+            document.querySelector("#answer").value="";
+
+        })
+        function loadAnswers(){ // Do something with the JSON data
+                    answers = {
+                        "1": "D",
+                        "2": "D",
+                        "3": "A",
+                        "4": "A",
+                        "5": "C",
+                        "6": "C",
+                        "7": "B,D",
+                        "8": "C",
+                        "9": "D",
+                        "10": "B",
+                        "11": "A,C",
+                        "12": "C",
+                        "13": "A",
+                        "14": "C",
+                        "15": "D",
+                        "16": "A",
+                        "17": "C",
+                        "18": "A",
+                        "19": "B",
+                        "20": "D",
+                        "21": "C",
+                        "22": "D",
+                        "23": "A",
+                        "24": "B",
+                        "25": "A",
+                        "26": "A",
+                        "27": "C",
+                        "28": "B,E",
+                        "29": "B",
+                        "30": "C",
+                        "31": "C",
+                        "32": "C",
+                        "33": "B",
+                        "34": "C",
+                        "35": "A,D",
+                        "36": "B",
+                        "37": "B",
+                        "38": "B",
+                        "39": "D",
+                        "40": "A",
+                        "41": "B",
+                        "42": "A",
+                        "43": "B",
+                        "44": "A",
+                        "45": "C",
+                        "46": "B",
+                        "47": "A",
+                        "48": "D",
+                        "49": "D",
+                        "50": "D",
+                        "51": "D",
+                        "52": "B,E",
+                        "53": "D",
+                        "54": "B",
+                        "55": "D",
+                        "56": "B",
+                        "57": "A",
+                        "58": "A",
+                        "59": "D",
+                        "60": "D",
+                        "61": "B",
+                        "62": "A",
+                        "63": "A",
+                        "64": "B",
+                        "65": "A",
+                        "66": "C",
+                        "67": "B",
+                        "68": "B",
+                        "69": "A",
+                        "70": "C",
+                        "71": "C,D",
+                        "72": "B",
+                        "73": "D",
+                        "74": "A",
+                        "75": "C",
+                        "76": "A",
+                        "77": "C,E",
+                        "78": "D,E",
+                        "79": "B",
+                        "80": "B",
+                        "81": "C",
+                        "82": "B",
+                        "83": "D",
+                        "84": "A",
+                        "85": "C",
+                        "86": "A",
+                        "87": "B",
+                        "88": "A",
+                        "89": "D",
+                        "90": "B",
+                        "91": "C",
+                        "92": "C",
+                        "93": "B",
+                        "94": "C",
+                        "95": "C",
+                        "96": "B",
+                        "97": "C",
+                        "98": "C",
+                        "99": "D",
+                        "100": "B",
+                        "101": "A",
+                        "102": "A,B",
+                        "103": "B",
+                        "104": "A,E",
+                        "105": "B",
+                        "106": "C",
+                        "107": "C",
+                        "108": "A",
+                        "109": "C",
+                        "110": "C",
+                        "111": "B",
+                        "112": "C",
+                        "113": "B,E",
+                        "114": "D",
+                        "115": "B",
+                        "116": "A,E",
+                        "117": "A",
+                        "118": "B",
+                        "119": "A",
+                        "120": "B",
+                        "121": "C,E",
+                        "122": "C",
+                        "123": "D",
+                        "124": "B",
+                        "125": "A",
+                        "126": "B",
+                        "127": "B",
+                        "128": "A,E",
+                        "129": "D",
+                        "130": "A",
+                        "131": "A",
+                        "132": "B",
+                        "133": "D",
+                        "134": "D",
+                        "135": "B",
+                        "136": "C",
+                        "137": "B",
+                        "138": "D",
+                        "139": "A",
+                        "140": "C",
+                        "141": "A",
+                        "142": "A",
+                        "143": "D",
+                        "144": "B",
+                        "145": "D",
+                        "146": "B",
+                        "147": "C",
+                        "148": "D",
+                        "149": "B",
+                        "150": "B,C",
+                        "151": "A",
+                        "152": "C",
+                        "153": "C",
+                        "154": "B",
+                        "155": "D",
+                        "156": "C",
+                        "157": "A",
+                        "158": "C",
+                        "159": "A,E",
+                        "160": "D",
+                        "161": "B,E",
+                        "162": "A",
+                        "163": "A",
+                        "164": "A",
+                        "165": "D",
+                        "166": "D",
+                        "167": "A",
+                        "168": "B",
+                        "169": "B",
+                        "170": "B",
+                        "171": "B",
+                        "172": "C",
+                        "173": "D",
+                        "174": "D",
+                        "175": "B",
+                        "176": "A",
+                        "177": "C,D",
+                        "178": "C",
+                        "179": "A",
+                        "180": "A",
+                        "181": "C",
+                        "182": "A",
+                        "183": "A,C",
+                        "184": "A",
+                        "185": "D",
+                        "186": "C",
+                        "187": "C",
+                        "188": "B",
+                        "189": "A,B ",
+                        "190": "C",
+                        "191": "A,B",
+                        "192": "A",
+                        "193": "A",
+                        "194": "B",
+                        "195": "A",
+                        "196": "A",
+                        "197": "B,E",
+                        "198": "B",
+                        "199": "B",
+                        "200": "B",
+                        "201": "B",
+                        "202": "D",
+                        "203": "C",
+                        "204": "B",
+                        "205": "A",
+                        "206": "C",
+                        "207": "A",
+                        "208": "B",
+                        "209": "B",
+                        "210": "D,E",
+                        "211": "B",
+                        "212": "C,E",
+                        "213": "D",
+                        "214": "D",
+                        "215": "C",
+                        "216": "D",
+                        "217": "A",
+                        "218": "A",
+                        "219": "B",
+                        "220": "D,E",
+                        "221": "B",
+                        "222": "C",
+                        "223": "A",
+                        "224": "",
+                        "225": "A,E",
+                        "226": "D",
+                        "227": "A",
+                        "228": "B",
+                        "229": "B",
+                        "230": "D",
+                        "231": "A",
+                        "232": "D",
+                        "233": "A",
+                        "234": "C",
+                        "235": "D",
+                        "236": "B",
+                        "237": "A",
+                        "238": "D",
+                        "239": "C",
+                        "240": "C",
+                        "241": "C",
+                        "242": "C",
+                        "243": "A",
+                        "244": "B,D",
+                        "245": "C",
+                        "246": "B",
+                        "247": "A",
+                        "248": "D,E",
+                        "249": "C",
+                        "250": "C",
+                        "251": "B",
+                        "252": "B",
+                        "253": "D",
+                        "254": "C",
+                        "255": "D",
+                        "256": "A",
+                        "257": "D",
+                        "258": "A,B",
+                        "259": "D",
+                        "260": "A",
+                        "261": "C,E",
+                        "262": "B",
+                        "263": "D",
+                        "264": "C,D",
+                        "265": "A,B",
+                        "266": "A",
+                        "267": "B",
+                        "268": "C",
+                        "269": "C",
+                        "270": "A",
+                        "271": "B",
+                        "272": "D",
+                        "273": "D",
+                        "274": "A",
+                        "275": "A",
+                        "276": "C",
+                        "277": "D,E",
+                        "278": "D",
+                        "279": "C",
+                        "280": "A,E",
+                        "281": "B",
+                        "282": "A",
+                        "283": "D",
+                        "284": "C",
+                        "285": "B",
+                        "286": "D",
+                        "287": "B",
+                        "288": "A",
+                        "289": "B",
+                        "290": "A",
+                        "291": "B",
+                        "292": "A",
+                        "293": "A,B",
+                        "294": "D",
+                        "295": "C",
+                        "296": "D",
+                        "297": "B,E",
+                        "298": "A",
+                        "299": "C",
+                        "300": "A",
+                        "301": "C",
+                        "302": "C",
+                        "303": "C",
+                        "304": "A",
+                        "305": "C",
+                        "306": "A",
+                        "307": "D",
+                        "308": "A",
+                        "309": "A",
+                        "310": "D",
+                        "311": "C",
+                        "312": "D",
+                        "313": "A,E",
+                        "314": "B,C",
+                        "315": "A,C",
+                        "316": "A,E",
+                        "317": "D",
+                        "318": "B",
+                        "319": "A",
+                        "320": "A",
+                        "321": "C,D",
+                        "322": "A",
+                        "323": "D",
+                        "324": "B",
+                        "325": "D",
+                        "326": "D",
+                        "327": "C",
+                        "328": "A",
+                        "329": "B",
+                        "330": "B",
+                        "331": "D",
+                        "332": "B",
+                        "333": "A",
+                        "334": "B",
+                        "335": "D",
+                        "336": "D",
+                        "337": "C",
+                        "338": "A,E",
+                        "339": "D",
+                        "340": "A",
+                        "341": "A",
+                        "342": "B,C",
+                        "343": "A",
+                        "344": "B",
+                        "345": "A",
+                        "346": "A",
+                        "347": "D,E",
+                        "348": "B",
+                        "349": "C",
+                        "350": "C",
+                        "351": "D",
+                        "352": "A",
+                        "353": "C",
+                        "354": "D",
+                        "355": "A,D",
+                        "356": "D",
+                        "357": "B",
+                        "358": "B",
+                        "359": "A",
+                        "360": "C",
+                        "361": "A",
+                        "362": "C,D",
+                        "363": "C",
+                        "364": "D",
+                        "365": "C",
+                        "366": "C",
+                        "367": "C",
+                        "368": "B",
+                        "369": "A",
+                        "370": "B",
+                        "371": "C",
+                        "372": "D",
+                        "373": "C",
+                        "374": "B",
+                        "375": "A",
+                        "376": "A",
+                        "377": "A",
+                        "378": "D",
+                        "379": "A",
+                        "380": "C",
+                        "381": "B",
+                        "382": "B",
+                        "383": "C",
+                        "384": "C",
+                        "385": "A",
+                        "386": "A",
+                        "387": "A",
+                        "388": "D",
+                        "389": "D",
+                        "390": "D",
+                        "391": "D",
+                        "392": "D,E",
+                        "393": "D",
+                        "394": "A",
+                        "395": "C",
+                        "396": "B",
+                        "397": "A",
+                        "398": "C",
+                        "399": "A",
+                        "400": "A",
+                        "401": "B",
+                        "402": "C",
+                        "403": "B",
+                        "404": "C",
+                        "405": "A",
+                        "406": "B,E",
+                        "407": "C,E",
+                        "408": "D",
+                        "409": "C",
+                        "410": "D",
+                        "411": "C",
+                        "412": "A",
+                        "413": "D",
+                        "414": "C",
+                        "415": "A",
+                        "416": "D",
+                        "417": "A",
+                        "418": "A,B",
+                        "419": "A",
+                        "420": "C",
+                        "421": "C",
+                        "422": "A",
+                        "423": "D"
+                    };
+        }
+        function initQuestions(val){
+            let qRange = val.split("-");
+            if(qRange.length<=1){
+                showResponse(false,'You should add questions range to practice')
+            }else{
+                scores=0;
+                questionStart = parseInt(qRange[0]);
+                questionEnd = parseInt(qRange[1]);
+                question = questionStart;
+                elQuestionNumber.innerHTML = questionStart;
+                elQuestionImage.src = `images/${questionStart}.png`;
+                elSuccess.innerHTML='';
+                elScores.innerHTML = '';
+                document.querySelector("#answer").value="";
+            }
+        }
+        function clearResponse(){
+            setTimeout(function(){
+                elFail.style.display='none';
+                elSuccess.style.display='none';
+            },5000);
+        }
+        function showResponse(status,message){
+            switch (status){
+                case true:
+                    elSuccess.innerHTML=message;
+                    elSuccess.style.display='block';
+                    elFail.style.display='none';
+                    break;
+                default:
+                    elFail.innerHTML=message;
+                    elFail.style.display='block';
+                    elSuccess.style.display='none';
+            }
+            clearResponse();
+        }
+    })
+</script>
+</body>
+</html>
